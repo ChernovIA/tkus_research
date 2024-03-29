@@ -1,0 +1,36 @@
+version: '3.1'
+services:
+#  ollama:
+#    image: ollama/ollama:latest
+#    ports:
+#      - 11434:11434
+#    volumes:
+#      - .:/code
+#      - ./ollama/ollama:/root/.ollama
+#    container_name: ollama
+#    pull_policy: always
+#    tty: true
+#    restart: always
+#    networks:
+#      - ollama-docker
+#
+#networks:
+#  ollama-docker:
+#    external: false
+
+  postgres:
+    image: postgres:11
+    container_name: postgres-db-sto
+    environment:
+      POSTGRES_DB: analytics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+    restart: always

@@ -9,8 +9,7 @@ def process_request():
     headers = {'Content-type': 'application/json; charset=UTF-8'}
     ollama_req = requests.post("http://10.11.15.67:11434/api/generate", headers=headers, data=request.data)
 
-    response = jsonify(ollama_req.json()['response'])
-    return response
+    return jsonify(ollama_req.json()['response'])
 
 
 if __name__ == "__main__":

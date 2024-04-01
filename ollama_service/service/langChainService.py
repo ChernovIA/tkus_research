@@ -1,4 +1,4 @@
-import os
+
 
 from langchain_core.prompt_values import PromptValue
 from langchain_experimental.sql import SQLDatabaseChain
@@ -9,23 +9,16 @@ from langchain.prompts.chat import HumanMessagePromptTemplate
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
 
+from ollama_service.pref.envHolder import EnvHolder
 
-SERVER_IP = os.getenv("SERVER_IP")
-OLLAMA_PORT = os.getenv("OLLAMA_PORT")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DATABASE = os.getenv("POSTGRES_DATABASE")
 
+envHolder = EnvHolder()
 
 class LangChainService:
     def __init__(self):
-        ollama_base_url = f'http://{SERVER_IP}:{OLLAMA_PORT}'
+        ollama_base_url = f'http://{envHolder.server_ip}:{envHolder.ollama_port}'
 
         self.ollama = Ollama(base_url=ollama_base_url, model="llama2:7b-chat-q4_0")
-        self.db = SQLDatabase.from_uri(
-            f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{SERVER_IP}:{POSTGRES_PORT}/{POSTGRES_DATABASE}",
-            include_tables=['commercial_payment'], sample_rows_in_table_info=0, max_string_length=10000)
         self.db_chain = SQLDatabaseChain.from_llm(self.ollama, self.db, verbose=True, return_direct=True)
 
     def retrieve_from_db(self, query: str) -> str:

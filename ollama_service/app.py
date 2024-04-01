@@ -4,19 +4,24 @@ import json
 
 
 from services.ollamaService import OllamaService
+from services.questionMatcherService import QuestionMatcher
 
 app = Flask(__name__)
 lc_service = OllamaService()
-
+questionMatcher = QuestionMatcher()
 
 @app.route("/", methods=['POST', 'OPTIONS'])
 @cross_origin(origins='*')
 def process_request():
     json_obj = json.loads(request.data.decode())
 
-    answer = lc_service.generate(json_obj['prompt'])
+    answer_prompt = questionMatcher.match(json_obj['prompt'])
 
-    return jsonify(answer)
+    if answer_prompt is not None:
+        answer = lc_service.generate(json_obj['prompt'])
+        return jsonify('')
+    else:
+        return jsonify("I don't know")
 
 
 if __name__ == "__main__":

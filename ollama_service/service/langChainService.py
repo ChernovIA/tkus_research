@@ -35,7 +35,8 @@ class LangChainService:
 
     def generate(self, query: str) -> PromptValue:
         db_context = self.retrieve_from_db(query)
-        system_message = """Given an input question and SQL response, convert it to a natural language answer. No pre-amble."""
+        system_message = """Given an input question and SQL response, convert it to a natural language answer. No pre-amble.
+        """
         human_qry_template = """
             Input:
             {input}

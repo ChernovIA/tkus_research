@@ -56,4 +56,4 @@ class PromptService:
     def obtain_prompt(self, id: int, query: str, query_filter: str, prompt: str):
         sql_query = query.format("filter", query_filter)
         result = db_service.run_query(sql_query)
-        return self.process_map[id](result, prompt)
+        return self.process_map[id](prompt, result)

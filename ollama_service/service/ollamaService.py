@@ -5,7 +5,7 @@ from langchain_community.llms import Ollama
 
 
 from ollama_service.pref.envHolder import EnvHolder
-from promptService import PromptService
+from ollama_service.service.promptService import PromptService
 
 envHolder = EnvHolder()
 promptService = PromptService()

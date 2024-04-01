@@ -2,8 +2,9 @@ from typing import Sequence, Any
 
 from langchain_core.prompts import ChatPromptTemplate
 
-from dbService import DBService
 from sqlalchemy import Row
+
+from ollama_service.service.dbService import DBService
 
 db_service = DBService()
 

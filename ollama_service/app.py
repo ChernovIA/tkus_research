@@ -1,10 +1,9 @@
-import requests
 from flask import Flask, request, jsonify
 from flask_cors import cross_origin
 import json
 
 
-from service.ollamaService import OllamaService
+from services.ollamaService import OllamaService
 
 app = Flask(__name__)
 lc_service = OllamaService()

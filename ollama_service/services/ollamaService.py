@@ -3,9 +3,8 @@
 from langchain_core.prompt_values import PromptValue
 from langchain_community.llms import Ollama
 
-
-from ollama_service.pref.envHolder import EnvHolder
-from ollama_service.service.promptService import PromptService
+from pref.envHolder import EnvHolder
+from services.promptService import PromptService
 
 envHolder = EnvHolder()
 promptService = PromptService()

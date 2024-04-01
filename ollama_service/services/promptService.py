@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from sqlalchemy import Row
 
-from ollama_service.service.dbService import DBService
+from services.dbService import DBService
 
 db_service = DBService()
 

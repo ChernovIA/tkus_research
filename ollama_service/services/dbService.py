@@ -1,8 +1,8 @@
 from typing import Any, Sequence
 
 from sqlalchemy import create_engine, text, Row
-from ollama_service.pref.envHolder import EnvHolder
 
+from pref.envHolder import EnvHolder
 
 envHolder = EnvHolder()
 

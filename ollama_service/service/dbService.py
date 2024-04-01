@@ -15,9 +15,3 @@ class DBService:
         with self.engine.connect() as conn:
             res = conn.execute(text(query))
             return res.fetchall()
-
-
-db_service = DBService()
-result = db_service.run_query("select * from commercial_payment as cp order by cp.commercial_payment_id")
-for row in result:
-    print(row)

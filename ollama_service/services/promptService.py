@@ -12,21 +12,22 @@ db_service = DBService()
 SYSTEM_MESSAGE = "Given an input question and SQL response, convert it to a natural language answer. No pre-amble."
 
 
-def process_q1(result: Sequence[Row[Any]]):
+def process_q0(result: Sequence[Row[Any]]):
     db_context = f"Average amount is {result[0][0].quantize(Decimal('1.00'))}"
     return db_context
 
 
-def process_q2(result: Sequence[Row[Any]]):
-    db_context = result
+def process_q1(result: Sequence[Row[Any]]):
+    db_context = f"Variance for {result[0][0]} is {result[0][1]}"
+    db_context += f"Variance for {result[1][0]} is {result[1][1]}"
     return db_context
 
 
 class PromptService:
     def __init__(self):
         self.process_map = {
-            0: process_q1,
-            1: process_q2
+            0: process_q0,
+            1: process_q1
         }
 
     def obtain_prompt(self, id: int, query: str, query_filter: str):

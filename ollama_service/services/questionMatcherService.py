@@ -24,6 +24,6 @@ class QuestionMatcher:
 
             filtered = [s for s in filter_words['payment'].tolist() if s in question]
 
-            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered[0], result['query'])
+            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])
         else:
             return None

@@ -1,5 +1,5 @@
 from services.dbService import DBService
-from models.questionMatherAnswer import QuestionMatherAnswer
+from models.questionMatcherAnswer import QuestionMatcherAnswer
 
 db_service = DBService()
 
@@ -16,11 +16,25 @@ class QuestionMatcher:
             limit 1;
         '''
 
-    def match(self, question: str) -> QuestionMatherAnswer | None:
+        self.context_query = """
+            select * from answer_map m 
+            where context_requared and context = '{context}'
+        """
+
+        self.context_query_default = """
+                    select * from answer_map m 
+                    where context_requared
+                """
+
+    def match(self, question: str, context: str) -> QuestionMatcherAnswer | None:
         df = db_service.run_query_pandas(self.query.format(question=question))
 
         if not df.empty:
+            df = self.check_context_question(df, context)
+
+        if not df.empty:
             result = df.iloc[0]
+
             sql_query_for_filter = str(result['filter'])
 
             if len(sql_query_for_filter):
@@ -29,6 +43,17 @@ class QuestionMatcher:
             else:
                 filtered = None
 
-            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])
+            return QuestionMatcherAnswer(result['id'], question, result['prompt'], filtered, result['query'],
+                                         result['context'])
         else:
             return None
+
+    def check_context_question(self, df, context):
+        result = df.iloc[0]
+
+        if result['context_requared'] and context is not None:
+            return db_service.run_query_pandas(self.context_query.format(context=context))
+        elif result['context_requared']:
+            return db_service.run_query_pandas(self.context_query_default)
+        else:
+            return df

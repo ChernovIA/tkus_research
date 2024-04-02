@@ -6,6 +6,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "service_flask.py"]
+CMD ["python", "app.py"]
 
 EXPOSE 4443

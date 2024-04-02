@@ -25,5 +25,4 @@ def process_request():
 
 
 if __name__ == "__main__":
-    # app.run(port=4443, host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'))
-    app.run(port=4443)
+    app.run(port=4443, host='0.0.0.0')

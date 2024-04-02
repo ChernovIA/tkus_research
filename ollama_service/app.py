@@ -21,7 +21,8 @@ def process_request():
         answer = lc_service.generate(answer_prompt)
         return jsonify(answer)
     else:
-        return jsonify("I don't know")
+        answer = lc_service.generate_random(json_obj['prompt'])
+        return jsonify(answer)
 
 
 if __name__ == "__main__":

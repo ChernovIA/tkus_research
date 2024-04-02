@@ -7,9 +7,13 @@ db_service = DBService()
 class QuestionMatcher:
     def __init__(self):
         self.query = '''
-            SELECT *, similarity(m.key_words, '{question}') AS rank
-            FROM public.answer_map m
-            ORDER BY rank DESC limit 1;
+            select * from (
+	            SELECT *, similarity(m.key_words, '{question}') AS "rank"
+	            FROM public.answer_map m
+            ) as sel
+            where sel.rank > 0.01
+            order by sel.rank desc
+            limit 1;
         '''
 
     def match(self, question: str) -> QuestionMatherAnswer | None:

@@ -19,7 +19,9 @@ class DBService:
             res = conn.execute(text(query))
             return res.fetchall()
 
-    def run_query_pandas(self, query):
+    def run_query_pandas(self, query): # additional % for working in pandas
         print("Query = " + query)
+        query = query.replace("%", "%%")
+
         df = pd.read_sql_query(query, self.engine)
         return df

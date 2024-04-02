@@ -20,10 +20,10 @@ class QuestionMatcher:
         if not df.empty:
             result = df.iloc[0]
             sql_query_for_filter = result['filter']
-            filter_words = db_service.run_query_pandas(sql_query_for_filter)
+            filter_words = db_service.run_query_pandas(sql_query_for_filter)['value'].tolist()
 
-            filtered = [s for s in filter_words['value'].tolist() if s in question]
+            filtered = [s for s in filter_words if s in question]
 
-            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])
+            return QuestionMatherAnswer(result['id'], question, result['prompt'], [filtered, filter_words], result['query'])
         else:
             return None

@@ -19,11 +19,11 @@ class QuestionMatcher:
 
         if not df.empty:
             result = df.iloc[0]
-            splitted_filters = result['filter'].split(',')
-            map(lambda s: s.replace(" ", ""), splitted_filters)
+            sql_query_for_filter = result['filter']
+            filter_words = db_service.run_query_pandas(sql_query_for_filter)
 
-            filtered = [s for s in splitted_filters if s in question]
+            filtered = [s for s in filter_words['payment'].tolist() if s in question]
 
-            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])
+            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered[0], result['query'])
         else:
             return None

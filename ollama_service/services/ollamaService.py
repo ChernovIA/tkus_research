@@ -6,7 +6,7 @@ from langchain_community.llms import Ollama
 from pref.envHolder import EnvHolder
 from services.promptService import PromptService
 
-from ollama_service.models.questionMatherAnswer import QuestionMatherAnswer
+from models.questionMatherAnswer import QuestionMatherAnswer
 
 envHolder = EnvHolder()
 promptService = PromptService()

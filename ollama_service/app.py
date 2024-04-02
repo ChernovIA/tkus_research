@@ -18,8 +18,7 @@ def process_request():
     answer_prompt = questionMatcher.match(json_obj['prompt'])
 
     if answer_prompt is not None:
-        answer = lc_service.generate(answer_prompt.question, answer_prompt.id, answer_prompt.query,
-                                     answer_prompt.filter, answer_prompt.promt)
+        answer = lc_service.generate(answer_prompt)
         return jsonify('')
     else:
         return jsonify("I don't know")

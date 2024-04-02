@@ -6,6 +6,8 @@ from langchain_community.llms import Ollama
 from pref.envHolder import EnvHolder
 from services.promptService import PromptService
 
+from ollama_service.models.questionMatherAnswer import QuestionMatherAnswer
+
 envHolder = EnvHolder()
 promptService = PromptService()
 
@@ -15,9 +17,9 @@ class OllamaService:
         ollama_base_url = f'http://{envHolder.server_ip}:{envHolder.ollama_port}'
         self.ollama = Ollama(base_url=ollama_base_url, model="llama2:7b-chat-q4_0")
 
-    def generate(self, human_query: str, id: int, query: str, query_filter: str, prompt: str) -> PromptValue:
-        prompt_template = promptService.obtain_prompt(id, query, query_filter, prompt)
+    def generate(self, payload: QuestionMatherAnswer) -> PromptValue:
+        prompt_template = promptService.obtain_prompt(payload.id, payload.query, payload.filter)
 
         chain = prompt_template | self.ollama
-        result = chain.invoke({"input": human_query})
+        result = chain.invoke({"input": payload.question})
         return result

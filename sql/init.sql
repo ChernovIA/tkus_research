@@ -1,3 +1,5 @@
+CREATE EXTENSION pg_trgm;
+
 CREATE TABLE public.alert
 (
     alert_id    int8    NOT NULL,
@@ -44,13 +46,18 @@ CREATE TABLE public.commercial_payer
 );
 
 
-CREATE TABLE public.commercial_payment
-(
-    commercial_payment_id int8    NOT NULL,
-    amount                int8    NULL,
-    code                  varchar NULL,
-    sort_order            int4    NOT NULL,
-    trend                 int4    NULL,
+CREATE TABLE public.commercial_payment (
+    commercial_payment_id int8 NOT NULL,
+    amount int8 NULL,
+    payment varchar NULL,
+    sort_order int4 NOT NULL,
+    trend int4 NULL,
+    goal float8 NULL,
+    variance_goal float8 NULL,
+    total_amount float8 NULL,
+    total_goal float8 NULL,
+    variance_amount float4 NULL,
+    variance float4 NULL,
     CONSTRAINT commercial_payment_pk PRIMARY KEY (commercial_payment_id)
 );
 
@@ -145,13 +152,14 @@ values (1, 'BCBS', 38, 1),
 
 --commercial_payment
 INSERT INTO public.commercial_payment
-    (id, code, amount, sort_order, trend)
-values (1, 'Lockbox 1', 203280, 0, 1),
-       (2, 'Lockbox 2', 435600, 1, 1),
-       (3, 'Lockbox 3', 609840, 2, 1),
-       (4, 'Electronic payments Bank 1', 726000, 3, 1),
-       (5, 'Electronic payments Bank 2', 842160, 4, 2),
-       (6, 'Credit cards', 58080, 5, 0);
+(commercial_payment_id, amount, payment, sort_order, trend, goal, variance_goal, total_amount, total_goal, variance_amount, variance)
+VALUES (1, 203280, 'Lockbox 1', 0, 1, 206393.94, 7.0, 2874960.0, 285640874, 7.0, -2.0),
+       (2, 435600, 'Lockbox 2', 1, 1, 45227273, 16.0, 2874960.0, 285640874, 15.0, -4.0),
+       (3, 609840, 'Lockbox 3', 2, 2, 510000.0, 18.0, 2874960.0, 285640874, 21.0, 20.0),
+       (4, 726000, 'Electronic payments Bank 1', 3, 1, 75341684, 26.0, 2874960.0, 285640874, 25.0, -4.0),
+       (5, 842160, 'Electronic payments Bank 2', 4, 1, 87135623, 31.0, 2874960.0, 285640874, 29.0, -3.0),
+       (6, 58080, 'Credit cards', 5, 0, 62969.0, 2.0, 2874960.0, 285640874, 2.0, -8.0);
+
 
 
 --cost_to_collect_efficiency

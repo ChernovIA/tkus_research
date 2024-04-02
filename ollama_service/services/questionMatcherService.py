@@ -24,7 +24,7 @@ class QuestionMatcher:
                 filter_words = db_service.run_query_pandas(sql_query_for_filter)['value'].tolist()
                 filtered = [s for s in filter_words if s in question]
             else:
-                filtered = []
+                filtered = None
 
 
             return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])

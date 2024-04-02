@@ -2,13 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import cross_origin
 import json
 
-
 from services.ollamaService import OllamaService
 from services.questionMatcherService import QuestionMatcher
 
 app = Flask(__name__)
 lc_service = OllamaService()
 questionMatcher = QuestionMatcher()
+
 
 @app.route("/", methods=['POST', 'OPTIONS'])
 @cross_origin(origins='*')
@@ -18,7 +18,8 @@ def process_request():
     answer_prompt = questionMatcher.match(json_obj['prompt'])
 
     if answer_prompt is not None:
-        answer = lc_service.generate(json_obj['prompt'])
+        answer = lc_service.generate(answer_prompt.question, answer_prompt.id, answer_prompt.query,
+                                     answer_prompt.filter, answer_prompt.promt)
         return jsonify('')
     else:
         return jsonify("I don't know")

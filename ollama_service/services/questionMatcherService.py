@@ -18,6 +18,12 @@ class QuestionMatcher:
         df = db_service.run_query_pandas(self.query.format(question=question))
 
         if not df.empty:
-            return QuestionMatherAnswer(question, df['prompt'][0], df['filter'][0], df['query'][0])
+            result = df.iloc[0]
+            splitted_filters = result['filter'].split(',')
+            map(lambda s: s.replace(" ", ""), splitted_filters)
+
+            filtered = [s for s in splitted_filters if s in question]
+
+            return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])
         else:
             return None

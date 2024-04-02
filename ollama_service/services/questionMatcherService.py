@@ -26,7 +26,6 @@ class QuestionMatcher:
             else:
                 filtered = None
 
-
             return QuestionMatherAnswer(result['id'], question, result['prompt'], filtered, result['query'])
         else:
             return None

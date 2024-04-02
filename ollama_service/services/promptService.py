@@ -13,7 +13,7 @@ SYSTEM_MESSAGE = "Given an input question and SQL response, convert it to a natu
 
 
 def process_q0(result: Sequence[Row[Any]]):
-    db_context = f"Average amount is {result[0][0].quantize(Decimal('1.00'))}"
+    db_context = f"Average amount is {result[0][0].quantize(Decimal('1.00'))} $"
     return db_context
 
 
@@ -24,9 +24,9 @@ def process_q1(result: Sequence[Row[Any]]):
 
 
 def process_q2(result: Sequence[Row[Any]]):
-    db_context = ""
+    db_context = "Compare object in query with all other\n"
     for row in result:
-        db_context = f"{row[0]} had {row[1]}"
+        db_context += f"{row[0]} had {row[1]} %\n"
     return db_context
 
 

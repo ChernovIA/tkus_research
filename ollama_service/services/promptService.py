@@ -42,7 +42,10 @@ class PromptService:
 
     def obtain_prompt(self, id: int, query: str, query_filter: str | None):
         if query_filter is not None:
-            sql_query = query.format(f"'{','.join(query_filter)}'")
+            if len(query_filter):
+                sql_query = query.format(f"'{','.join(query_filter)}'")
+            else:
+                return self.obtain_default_prompt()
         else:
             sql_query = query
         result = db_service.run_query(sql_query)
@@ -57,5 +60,17 @@ class PromptService:
         messages = [
             ("system", SYSTEM_MESSAGE),
             ("human", human_qry_template + db_context)
+        ]
+        return ChatPromptTemplate.from_messages(messages)
+
+    def obtain_default_prompt(self):
+        system_message = """No matte what use ask you say that you do not understand question, "
+                          you may say joke about you misunderstanding. Not use smiles. Answer shortly."""
+        human_qry_template = """
+            Input:
+            {input}"""
+        messages = [
+            ("system", system_message),
+            ("human", human_qry_template)
         ]
         return ChatPromptTemplate.from_messages(messages)

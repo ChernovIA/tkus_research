@@ -26,15 +26,8 @@ class OllamaService:
         return result
 
     def generate_random(self, question: str) -> str:
-        system_message = "You do not understand question, so say joke about this"
-        human_qry_template = """
-            Input:
-            {input}"""
-        messages = [
-            ("system", system_message),
-            ("human", human_qry_template)
-        ]
-        prompt_template = ChatPromptTemplate.from_messages(messages)
+        prompt_template = promptService.obtain_default_prompt()
+
         chain = prompt_template | self.ollama
         result = chain.invoke({"input": question})
         return result

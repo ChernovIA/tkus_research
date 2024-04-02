@@ -9,7 +9,6 @@ class QuestionMatcher:
         self.query = '''
             SELECT *, similarity(m.key_words, '{question}') AS rank
             FROM public.answer_map m
-            WHERE m.key_words % '{question}'
             ORDER BY rank DESC limit 1;
         '''
 

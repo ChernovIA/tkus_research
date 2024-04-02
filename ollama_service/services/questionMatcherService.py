@@ -11,7 +11,7 @@ class QuestionMatcher:
 	            SELECT *, similarity(m.key_words, '{question}') AS "rank"
 	            FROM public.answer_map m
             ) as sel
-            where sel.rank > 0.01
+            where sel.rank > 0.06
             order by sel.rank desc
             limit 1;
         '''

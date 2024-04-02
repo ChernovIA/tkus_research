@@ -19,7 +19,7 @@ def process_request():
 
     if answer_prompt is not None:
         answer = lc_service.generate(answer_prompt)
-        return jsonify('')
+        return jsonify(answer)
     else:
         return jsonify("I don't know")
 

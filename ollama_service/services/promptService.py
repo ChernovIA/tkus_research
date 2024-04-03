@@ -20,15 +20,15 @@ def process_q0(result: Sequence[Row[Any]]):
 
 
 def process_q1(result: Sequence[Row[Any]]):
-    db_context = f"Variance for {round(result[0][0],2)} is {round(result[0][1],2)}"
-    db_context += f"Variance for {round(result[1][0],2)} is {round(result[1][1],2)}"
+    db_context = f"Variance for {result[0][0]} is {round(result[0][1],2)}"
+    db_context += f"Variance for {result[1][0]} is {round(result[1][1],2)}"
     return db_context, SYSTEM_MESSAGE
 
 
 def process_q2(result: Sequence[Row[Any]]):
     db_context = ""
     for row in result:
-        db_context += f"{round(row[0],2)} had {round(row[1],0)}%\n"
+        db_context += f"{row[0]} had {round(row[1],2)}%\n"
     return db_context, SYSTEM_MESSAGE + "Compare object in query with all other"
 
 

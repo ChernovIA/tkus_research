@@ -39,7 +39,7 @@ class QuestionMatcher:
 
             if len(sql_query_for_filter):
                 filter_words = db_service.run_query_pandas(sql_query_for_filter)['value'].tolist()
-                filtered = [s for s in filter_words if s in question]
+                filtered = [s for s in filter_words if s.lower() in question.lower()]
             else:
                 filtered = None
 

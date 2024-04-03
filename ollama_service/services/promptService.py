@@ -9,25 +9,41 @@ from services.dbService import DBService
 
 db_service = DBService()
 
-SYSTEM_MESSAGE = "Given an input question and SQL response, convert it to a natural language answer. No pre-amble."
+SYSTEM_MESSAGE = ("""Given an input question and SQL response, convert it to a natural language answer. No pre-amble.
+Do not use smiles. Do not use emoji.Do not use special characters.
+Do not say 'here is a natural language answer\n""")
 
 
 def process_q0(result: Sequence[Row[Any]]):
-    db_context = f"Average amount is {result[0][0].quantize(Decimal('1.00'))} $"
-    return db_context
+    db_context = f"Average amount is {result[0][0].quantize(Decimal('1.00'))}$"
+    return db_context, SYSTEM_MESSAGE
 
 
 def process_q1(result: Sequence[Row[Any]]):
-    db_context = f"Variance for {result[0][0]} is {result[0][1]}"
-    db_context += f"Variance for {result[1][0]} is {result[1][1]}"
-    return db_context
+    db_context = f"Variance for {round(result[0][0],2)} is {round(result[0][1],2)}"
+    db_context += f"Variance for {round(result[1][0],2)} is {round(result[1][1],2)}"
+    return db_context, SYSTEM_MESSAGE
 
 
 def process_q2(result: Sequence[Row[Any]]):
-    db_context = "Compare object in query with all other\n"
+    db_context = ""
     for row in result:
-        db_context += f"{row[0]} had {row[1]} %\n"
-    return db_context
+        db_context += f"{round(row[0],2)} had {round(row[1],0)}%\n"
+    return db_context, SYSTEM_MESSAGE + "Compare object in query with all other"
+
+
+def process_q5(result: Sequence[Row[Any]]):
+    db_context = ""
+    for row in result:
+        db_context += f"payment {row[0]} had benchmark {round(row[1],2)}% or {round(row[2],2)}$ \n"
+    return db_context, SYSTEM_MESSAGE + "Compare object in query with all other. Highlight the highest values."
+
+
+def process_q6(result: Sequence[Row[Any]]):
+    db_context = ""
+    for row in result:
+        db_context += f"Total deposits collected would be {round(row[0],2)}$ which is {round(row[1], 2)}%\n"
+    return db_context, SYSTEM_MESSAGE
 
 
 class PromptService:
@@ -37,10 +53,12 @@ class PromptService:
             1: process_q1,
             2: process_q2,
             3: process_q2,
-            4: process_q2
+            4: process_q2,
+            5: process_q5,
+            6: process_q6
         }
 
-    def obtain_prompt(self, id: int, query: str, query_filter: str | None):
+    def obtain_prompt(self, row_id: int, query: str, query_filter: str | None):
         if query_filter is not None:
             if len(query_filter):
                 sql_query = query.format(f"'{','.join(query_filter)}'")
@@ -49,7 +67,7 @@ class PromptService:
         else:
             sql_query = query
         result = db_service.run_query(sql_query)
-        db_context = self.process_map[id](result)
+        db_context, system_message = self.process_map[row_id](result)
 
         human_qry_template = """
             Input:
@@ -58,14 +76,16 @@ class PromptService:
             Context from database:
             """
         messages = [
-            ("system", SYSTEM_MESSAGE),
+            ("system", system_message),
             ("human", human_qry_template + db_context)
         ]
         return ChatPromptTemplate.from_messages(messages)
 
-    def obtain_default_prompt(self):
+    @staticmethod
+    def obtain_default_prompt():
         system_message = """No matte what use ask you say that you do not understand question, "
-                          you may say joke about you misunderstanding. Not use smiles. Answer shortly."""
+                          you may say joke about you misunderstanding. Do not use smiles. Do not use emoji.
+                          Do not use special characters. Answer shortly."""
         human_qry_template = """
             Input:
             {input}"""

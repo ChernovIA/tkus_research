@@ -27,7 +27,7 @@ class QuestionMatcher:
                 """
 
     def match(self, question: str, context: str) -> QuestionMatcherAnswer | None:
-        question = question.replace("'", "")
+        question = question.replace("'", "").replace('"', '')
 
         df = db_service.run_query_pandas(self.query.format(question=question))
 

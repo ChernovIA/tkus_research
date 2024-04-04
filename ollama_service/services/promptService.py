@@ -15,34 +15,36 @@ Do not say 'here is a natural language answer\n""")
 
 
 def process_q0(result: Sequence[Row[Any]]):
-    db_context = f"Average amount is {result[0][0].quantize(Decimal('1.00'))}$"
+    db_context = f"Average amount is ${round(result[0][0]):_}"
     return db_context, SYSTEM_MESSAGE
 
 
 def process_q1(result: Sequence[Row[Any]]):
-    db_context = f"Variance for {result[0][0]} is {round(result[0][1],2)}"
-    db_context += f"Variance for {result[1][0]} is {round(result[1][1],2)}"
+    db_context = f"Variance for {result[0][0]} is {round(result[0][1],1)}%"
+    db_context += f"Variance for {result[1][0]} is {round(result[1][1],1)}%"
     return db_context, SYSTEM_MESSAGE
 
 
 def process_q2(result: Sequence[Row[Any]]):
     db_context = ""
     for row in result:
-        db_context += f"{row[0]} had {round(row[1],2)}%\n"
+        db_context += f"{row[0]} had {round(row[1],1)}%\n"
     return db_context, SYSTEM_MESSAGE + "Compare object in query with all other"
 
 
 def process_q5(result: Sequence[Row[Any]]):
     db_context = ""
     for row in result:
-        db_context += f"payment {row[0]} had benchmark {round(row[1],2)}% or {round(row[2],2)}$ \n"
-    return db_context, SYSTEM_MESSAGE + "Compare object in query with all other. Highlight the highest values."
+        db_context += f"Prior day deposits in {row[0]} are {round(row[1],1)}% which has a value ${round(row[2],2):_} \n"
+    return db_context, SYSTEM_MESSAGE + ("Compare object in query with all other. Highlight the highest values and the "
+                                         "lower values")
 
 
 def process_q6(result: Sequence[Row[Any]]):
     db_context = ""
     for row in result:
-        db_context += f"Total deposits collected would be {round(row[0],2)}$ which is {round(row[1], 2)}%\n"
+        db_context += (f"Total deposits collected would be {round(row[0],2)}$ which is {round(row[1], 1)}% of the goal "
+                       f"achieved.\n")
     return db_context, SYSTEM_MESSAGE
 
 
@@ -83,9 +85,10 @@ class PromptService:
 
     @staticmethod
     def obtain_default_prompt():
-        system_message = """No matte what user ask you say that you do not understand question, "
-                          you may say joke about you misunderstanding. Do not use smiles. Do not use emoji.
-                          Do not use special characters. Answer shortly."""
+        system_message = """No matte what user ask you say that you do not understand question, " Use formal english. 
+        Do not use smiles. Do not use emoji. Do not use special characters. Answer shortly. Example: I'm sorry, 
+        I'm not sure I understand your question. Could you please provide more context or rephrase it in a different 
+        way?"""
         human_qry_template = """
             Input:
             {input}"""

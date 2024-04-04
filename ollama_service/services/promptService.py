@@ -43,9 +43,17 @@ def process_q5(result: Sequence[Row[Any]]):
 def process_q6(result: Sequence[Row[Any]]):
     db_context = ""
     for row in result:
-        db_context += (f"Total deposits collected would be {round(row[0],2)}$ which is {round(row[1], 1)}% of the goal "
+        db_context += (f"Total deposits collected would be ${round(row[0],2)} which is {round(row[1], 1)}% of the goal "
                        f"achieved.\n")
     return db_context, SYSTEM_MESSAGE
+
+
+def process_q7(result: Sequence[Row[Any]]):
+    db_context = ""
+    for row in result:
+        db_context += f"${round(row[1],2)}"
+    return db_context, SYSTEM_MESSAGE + ("Example: Two amounts were higher than average amount of deposits in Lockbox 3"
+                                         " $33,056 and $63,056")
 
 
 class PromptService:
@@ -57,7 +65,8 @@ class PromptService:
             3: process_q2,
             4: process_q2,
             5: process_q5,
-            6: process_q6
+            6: process_q6,
+            7: process_q7
         }
 
     def obtain_prompt(self, row_id: int, query: str, query_filter: str | None):

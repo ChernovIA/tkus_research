@@ -56,6 +56,25 @@ def process_q7(result: Sequence[Row[Any]]):
                                          " $33,056 and $63,056")
 
 
+def process_q8(result: Sequence[Row[Any]]):
+    db_context = ""
+    for row in result:
+        db_context += f"${round(row[0],0)}%"
+    return db_context, SYSTEM_MESSAGE
+
+
+def process_q9(result: Sequence[Row[Any]]):
+    db_context = ""
+    for row in result:
+        db_context += f"${row[0]} its goal by {round(row[2],1)}%"
+    return db_context, SYSTEM_MESSAGE + """ Example: BCBS is significantly below its goal by 38.4%.
+                                                    UnitedHealth has exceeded its goal by 24.8%.
+                                                    Aetna is slightly below its goal by 1.8%.
+                                                    Cigna is below its goal by 7.8%.
+                                                    Humana has slightly exceeded its goal by 0.7%.
+                                                    Other payers have exceeded their goal by 6.2%."""
+
+
 class PromptService:
     def __init__(self):
         self.process_map = {
@@ -66,7 +85,9 @@ class PromptService:
             4: process_q2,
             5: process_q5,
             6: process_q6,
-            7: process_q7
+            7: process_q7,
+            8: process_q8,
+            9: process_q9
         }
 
     def obtain_prompt(self, row_id: int, query: str, query_filter: str | None):

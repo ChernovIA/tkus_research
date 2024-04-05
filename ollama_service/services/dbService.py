@@ -1,6 +1,6 @@
 import pandas as pd
 
-from typing import Any, Sequence
+from typing import Any, Sequence, NoReturn
 
 from sqlalchemy import create_engine, text, Row
 
@@ -32,6 +32,12 @@ class DBService:
         with self.engine.connect() as conn:
             res = conn.execute(text(query))
             return res.fetchall()
+
+    @logs
+    def run_query_without_result(self, query) -> NoReturn:
+        with self.engine.connect() as conn:
+            conn.execute(text(query))
+            conn.commit()
 
     @logs
     def run_query_pandas(self, query):  # additional % for working in pandas

@@ -1,0 +1,21 @@
+{
+  "visual": {
+    "name": "qaCustom",
+    "displayName": "Q&A custom",
+    "guid": "qaCustomBCF058AF845C4340A28542A888F09FD1123",
+    "visualClassName": "Visual",
+    "version": "1.0.0.1",
+    "description": "Question and Answer custom visual",
+    "supportUrl": "https://www.wave-access.com/",
+    "gitHubUrl": ""
+  },
+  "apiVersion": "5.3.0",
+  "author": { "name": "WaveAccess", "email": "hello@wave-access.com" },
+  "assets": { "icon": "assets/icon.png" },
+  "externalJS": null,
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": null,
+  "stringResources": [],
+  "version": "1.0.0.0"
+}

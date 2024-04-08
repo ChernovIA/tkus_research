@@ -111,6 +111,13 @@ CREATE TABLE public.payments_by_transaction (
     value float4 NULL
 );
 
+CREATE TABLE public.chat_history (
+	id serial4 NOT NULL,
+	history text NULL,
+	created_at timestamptz NOT NULL DEFAULT now(),
+	CONSTRAINT chat_history_pkey PRIMARY KEY (id)
+);
+
 
 --alert
 INSERT INTO public.alert

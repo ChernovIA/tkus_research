@@ -15,7 +15,6 @@ import { ChatState, ChatMessage } from "./state";
 import ILocalVisualStorageService = powerbi.extensibility.ILocalVisualStorageService;
 
 export class Visual implements IVisual {
-  private sessionkey = "CUSTOM_QA_VISUAL3";
 
   private target: HTMLElement;
 
@@ -121,7 +120,7 @@ export class Visual implements IVisual {
   private async init() {
     this.reload();
     try {
-      let map = await fetch("https://tkus-lm-demo.wavea.cc/history", {
+      let map = await fetch("https://tkus-im.arks.im/history", {
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -262,7 +261,7 @@ export class Visual implements IVisual {
       true
     );
 
-    fetch("https://tkus-lm-demo.wavea.cc/", {
+    fetch("https://tkus-im.arks.im/", {
       signal: this.controller.signal,
       method: "POST",
       body: JSON.stringify({
@@ -376,7 +375,7 @@ export class Visual implements IVisual {
     this.controller.abort();
     this.controller = new AbortController();
 
-    fetch("https://tkus-lm-demo.wavea.cc/history", {
+    fetch("https://tkus-im.arks.im/history", {
         method: "DELETE",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -419,7 +418,7 @@ export class Visual implements IVisual {
 
     try {
       console.log('save to storage');
-      await fetch("https://tkus-lm-demo.wavea.cc/history", {
+      await fetch("https://tkus-im.arks.im/history", {
         method: "POST",
         headers: {
           "Content-type": "application/json; charset=UTF-8",

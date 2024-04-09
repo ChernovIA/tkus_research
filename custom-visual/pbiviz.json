@@ -2,7 +2,7 @@
   "visual": {
     "name": "qaCustom",
     "displayName": "Q&A custom",
-    "guid": "qaCustomBCF058AF845C4340A28542A888F09FD1123",
+    "guid": "qaCustomBCF058AF845C4340A28542A888F09FD9123",
     "visualClassName": "Visual",
     "version": "1.0.0.1",
     "description": "Question and Answer custom visual",

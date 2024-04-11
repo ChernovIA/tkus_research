@@ -38,3 +38,7 @@ Thumbs.db
 target/
 build/
 /ollama/ollama/
+.tmp
+dist
+node_modules
+__pycache__

@@ -167,15 +167,25 @@ export class Visual implements IVisual {
         <div class='init-slide'>
           <p id='try-smth' class='try-smth' >Try something like this</p>
 
-          <div id='option-btns' class='options'>
+          <div id='option-btns1' class='options'>
             <button id='btn-1' class='options__btn' type="button">What is the average amount of daily deposits collected in Lockbox 3?</button>
             <button id='btn-2' class='options__btn' type="button">What is the variance of Lockbox 3 and what are average variances of other payments?</button>
+          </div>
+          <div id='option-btns2' class='options'>
+            <button id='btn-3' class='options__btn' type="button">How does prior day's unapplied cash level compares to the average for the previous 3 days?</button>
+            <button id='btn-4' class='options__btn' type="button">What are the top 5 commercial payers?</button>
           </div>
         </div>
         `;
 
         document
-          .getElementById("option-btns")
+          .getElementById("option-btns1")
+          ?.addEventListener("click", (event) => {
+            this.makeRequest((<HTMLButtonElement>event.target).innerText);
+          });
+
+          document
+          .getElementById("option-btns2")
           ?.addEventListener("click", (event) => {
             this.makeRequest((<HTMLButtonElement>event.target).innerText);
           });
@@ -320,7 +330,7 @@ export class Visual implements IVisual {
         el.classList.add("message");
         el.classList.add("ai");
         el.id = id;
-        el.innerHTML = `Loading please wait...`;
+        el.innerHTML = `Analyzing data to answer...`;
         chat.appendChild(el);
 
         this.updateScroll();
